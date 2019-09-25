@@ -21,6 +21,9 @@ Layout/SpaceInsideBlockBraces:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+Lint/EmptyWhen:
+  Enabled: false
+
 Metrics/AbcSize:
   Enabled: false
 
