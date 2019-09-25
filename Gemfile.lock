@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    email_parser (0.1.1)
+    email_parser (0.1.2)
 
 GEM
   remote: https://rubygems.org/

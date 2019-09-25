@@ -1,3 +1,7 @@
+# v0.1.2
+
+- support default validator options (:if etc.)
+
 # v0.1.1
 
 - add option to allow domain beginning with number
