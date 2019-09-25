@@ -18,6 +18,8 @@ RSpec.describe EmailParser do
       [%(a@bb-cc), true],
       [%(a@b-), false],
       [%(a@b-.c), false],
+      [%(a@123), false],
+      [%(a@123), true, allow_domain_label_begin_with_number: true],
       [%(a..b@b), false],
       [%(a..b@b), true, allow_dot_sequence_in_local: true],
       [%(.a@b), false],

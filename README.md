@@ -37,6 +37,7 @@ EmailParser.valid?("test.@example.com", allow_local_end_with_dot: true) # => tru
 ## Parser options
 
 - `allow_address_literal: true` allows `a@[127.0.0.1]` etc. (default: `false`)
+- `allow_domain_label_begin_with_number: true` allows `a@123.com` etc.
 - `allow_dot_sequence_in_local: true` allows `a..b@example.com` etc. (default: `false`)
 - `allow_local_begin_with_dot: true` allows `.a@example.com` etc. (default: `false`)
 - `allow_local_end_with_dot: true` allows `a.@example.com` etc. (default: `false`)

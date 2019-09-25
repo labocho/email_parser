@@ -21,7 +21,7 @@ class EmailParser
     ")+",
   )
 
-  attr_reader :allow_address_literal, :allow_dot_sequence_in_local, :allow_local_begin_with_dot, :allow_local_end_with_dot
+  attr_reader :allow_address_literal, :allow_domain_label_begin_with_number, :allow_dot_sequence_in_local, :allow_local_begin_with_dot, :allow_local_end_with_dot
 
   def self.parse(src, **options)
     new(**options).parse(src)
@@ -31,10 +31,11 @@ class EmailParser
     new(**options).valid?(src)
   end
 
-  def initialize(allow_address_literal: false, allow_dot_sequence_in_local: false, allow_local_begin_with_dot: false, allow_local_end_with_dot: false)
+  def initialize(allow_address_literal: false, allow_domain_label_begin_with_number: false, allow_dot_sequence_in_local: false, allow_local_begin_with_dot: false, allow_local_end_with_dot: false)
     @allow_address_literal = allow_address_literal
     raise NotImplementedError("Sorry, `allow_address_literal == true` is not supported yet") if allow_address_literal
 
+    @allow_domain_label_begin_with_number = allow_domain_label_begin_with_number
     @allow_dot_sequence_in_local = allow_dot_sequence_in_local
     @allow_local_begin_with_dot = allow_local_begin_with_dot
     @allow_local_end_with_dot = allow_local_end_with_dot
@@ -170,7 +171,10 @@ class EmailParser
 
   def label(s)
     buffer = ""
-    return unless push!(buffer, s.scan(/[a-zA-Z]/))
+
+    unless allow_domain_label_begin_with_number
+      return unless push!(buffer, s.scan(/[a-zA-Z]/))
+    end
 
     push!(buffer, s.scan(/[a-zA-Z0-9]+/))
     push!(buffer, s.scan(/(-[a-zA-Z0-9]+)+/))
