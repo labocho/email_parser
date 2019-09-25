@@ -31,7 +31,7 @@ EmailParser.parse("test@example.com")
 EmailParser.valid?("test@example.com") # => true
 
 EmailParser.valid?("test.@example.com") # => false
-EmailParser.valid?("test.@example.com", allow_local_end_with_dot: true) # => false
+EmailParser.valid?("test.@example.com", allow_local_end_with_dot: true) # => true
 ```
 
 ## Parser options
