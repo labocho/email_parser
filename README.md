@@ -1,8 +1,8 @@
 # EmailParser
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/email_parser`. To experiment with that code, run `bin/console` for an interactive prompt.
+Ruby gem for parsing or validating email address.
+Parsing email address based on RFC5321 and RFC1035. But some violations are allowed by option.
 
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
@@ -20,9 +20,48 @@ Or install it yourself as:
 
     $ gem install email_parser
 
+
 ## Usage
 
-TODO: Write usage instructions here
+
+```ruby
+EmailParser.parse("test@example.com")
+# => [:mailbox, [:local_part, [:dot_string, [:atom, "test"]]], "@", [:domain, [:subdomain, [:label, "example"], [:dot, "."], [:label, "com"]]]]
+
+EmailParser.valid?("test@example.com") # => true
+
+EmailParser.valid?("test.@example.com") # => false
+EmailParser.valid?("test.@example.com", allow_local_end_with_dot: true) # => false
+```
+
+## Parser options
+
+- `allow_address_literal: true` allows `a@[127.0.0.1]` etc. (default: `false`)
+- `allow_dot_sequence_in_local: true` allows `a..b@example.com` etc. (default: `false`)
+- `allow_local_begin_with_dot: true` allows `.a@example.com` etc. (default: `false`)
+- `allow_local_end_with_dot: true` allows `a.@example.com` etc. (default: `false`)
+
+
+## Use as ActiveModel validator
+
+```ruby
+gem "email_parser", require: "email_parser/validator"
+```
+
+```ruby
+class Person
+  # All parser options and :allow_nil option are accepted.
+  validates :email, email: {allow_nil: true, allow_local_end_with_dot: true}
+end
+```
+
+You can set default parser options globally.
+
+```ruby
+EmailValidator.default_parser_options.merge!(
+  allow_local_end_with_dot: true,
+)
+```
 
 ## Development
 
