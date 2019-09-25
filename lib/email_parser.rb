@@ -173,7 +173,7 @@ class EmailParser
     return unless push!(buffer, s.scan(/[a-zA-Z]/))
 
     push!(buffer, s.scan(/[a-zA-Z0-9]+/))
-    push!(buffer, s.scan(/(-[a-zA-Z0-9])+/))
+    push!(buffer, s.scan(/(-[a-zA-Z0-9]+)+/))
 
     [:label, buffer]
   end

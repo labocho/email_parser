@@ -15,6 +15,7 @@ RSpec.describe EmailParser do
       [%(a@0b), false],
       [%(a@b0), true],
       [%(a@b0), true],
+      [%(a@bb-cc), true],
       [%(a@b-), false],
       [%(a@b-.c), false],
       [%(a..b@b), false],
