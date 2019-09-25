@@ -2,8 +2,6 @@ require "active_model"
 require "email_parser"
 
 class EmailValidator < ActiveModel::EachValidator
-  attr_reader :allow_nil
-
   class << self
     attr_accessor :default_parser_options
   end
@@ -12,14 +10,15 @@ class EmailValidator < ActiveModel::EachValidator
 
   def initialize(*_args)
     super
-    parser_options = options.dup
-    @allow_nil = parser_options.delete(:allow_nil)
+    parser_options = options.each_with_object({}) do |(k, v), h|
+      h[k] = v if EmailParser::OPTIONS.include?(k)
+    end
     @parser = EmailParser.new(**self.class.default_parser_options.merge(parser_options))
   end
 
   def validate_each(record, attribute, value)
     if value.nil?
-      return if allow_nil
+      return if options[:allow_nil]
 
       record.errors.add(attribute, :blank)
       return

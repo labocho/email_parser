@@ -21,7 +21,9 @@ class EmailParser
     ")+",
   )
 
-  attr_reader :allow_address_literal, :allow_domain_label_begin_with_number, :allow_dot_sequence_in_local, :allow_local_begin_with_dot, :allow_local_end_with_dot
+  OPTIONS = %i(allow_address_literal allow_domain_label_begin_with_number allow_dot_sequence_in_local allow_local_begin_with_dot allow_local_end_with_dot).freeze
+
+  attr_reader(*OPTIONS)
 
   def self.parse(src, **options)
     new(**options).parse(src)
@@ -31,14 +33,18 @@ class EmailParser
     new(**options).valid?(src)
   end
 
-  def initialize(allow_address_literal: false, allow_domain_label_begin_with_number: false, allow_dot_sequence_in_local: false, allow_local_begin_with_dot: false, allow_local_end_with_dot: false)
-    @allow_address_literal = allow_address_literal
-    raise NotImplementedError("Sorry, `allow_address_literal == true` is not supported yet") if allow_address_literal
+  def initialize(options = {})
+    options = options.dup
+    OPTIONS.each do |k|
+      v = options.delete(k)
+      instance_variable_set("@#{k}", v.nil? ? false : v)
+    end
 
-    @allow_domain_label_begin_with_number = allow_domain_label_begin_with_number
-    @allow_dot_sequence_in_local = allow_dot_sequence_in_local
-    @allow_local_begin_with_dot = allow_local_begin_with_dot
-    @allow_local_end_with_dot = allow_local_end_with_dot
+    unless options.empty?
+      raise "Unknown EmailParser option: #{options.inspect}"
+    end
+
+    raise NotImplementedError("Sorry, `allow_address_literal == true` is not supported yet") if allow_address_literal
   end
 
   def valid?(src)

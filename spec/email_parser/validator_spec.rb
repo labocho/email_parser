@@ -61,6 +61,25 @@ RSpec.describe EmailValidator do
     end
   end
 
+  context "if" do
+    before do
+      Person.class_eval do
+        attr_accessor :sms
+        validates :email, email: {if: -> { sms.nil? }}
+      end
+    end
+
+    it "validates email" do
+      expect(person).to be_valid
+
+      person.email = "invalid.@example.com"
+      expect(person).not_to be_valid
+
+      person.sms = "00000000000"
+      expect(person).to be_valid
+    end
+  end
+
   context "parser option specified" do
     before do
       Person.class_eval do
